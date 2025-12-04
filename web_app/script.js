@@ -8,18 +8,37 @@ const urlParams = new URLSearchParams(window.location.search);
 const startParam = parseInt(urlParams.get('start'));
 const endParam = parseInt(urlParams.get('end'));
 const mode = urlParams.get('mode');
+const subject = urlParams.get('subject');
+
+let sourceQuestions = questions; // Default to web questions
+let titleText = "Тест по веб-технологиям";
+
+if (subject === 'arch') {
+    if (typeof questions_arch !== 'undefined') {
+        sourceQuestions = questions_arch;
+        titleText = "Архитектура Компьютера";
+    } else {
+        console.error("questions_arch is not defined");
+    }
+}
+
+// Update title
+const headerTitle = document.querySelector('header h1');
+if (headerTitle) {
+    headerTitle.textContent = titleText;
+}
 
 let activeQuestions = [];
 let questionOffset = 0;
 
 if (mode === 'all') {
-    activeQuestions = questions;
+    activeQuestions = sourceQuestions;
 } else if (!isNaN(startParam) && !isNaN(endParam)) {
-    activeQuestions = questions.slice(startParam, endParam);
+    activeQuestions = sourceQuestions.slice(startParam, endParam);
     questionOffset = startParam;
 } else {
     // Default fallback
-    activeQuestions = questions;
+    activeQuestions = sourceQuestions;
 }
 
 // We need to prepare the questions: shuffle options for each question

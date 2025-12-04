@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правильные ответы</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .answer-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3);
+            border-left: 5px solid #4caf50;
+        }
+        .question-text {
+            font-weight: 500;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #202124;
+        }
+        .correct-answer {
+            color: #1e8e3e;
+            font-weight: 500;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" style="text-decoration: none; color: #673ab7; font-weight: 500; display: inline-block; margin-bottom: 10px;">← Вернуться в меню</a>
+            <h1 id="page-title">Правильные ответы</h1>
+        </header>
+
+        <input type="text" id="search-input" class="search-box" placeholder="Поиск по вопросам...">
+
+        <div id="answers-container">
+            <!-- Answers will be injected here -->
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="questions_arch.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const subject = urlParams.get('subject');
+        
+        let activeQuestions = [];
+        let titleText = "Ответы: Веб-технологии";
+
+        if (subject === 'arch') {
+            if (typeof questions_arch !== 'undefined') {
+                activeQuestions = questions_arch;
+                titleText = "Ответы: Архитектура Компьютера";
+            }
+        } else {
+            // Default to web
+            if (typeof questions !== 'undefined') {
+                activeQuestions = questions;
+            }
+        }
+
+        document.getElementById('page-title').textContent = titleText;
+
+        const container = document.getElementById('answers-container');
+        const searchInput = document.getElementById('search-input');
+
+        function renderQuestions(filterText = '') {
+            container.innerHTML = '';
+            const lowerFilter = filterText.toLowerCase();
+
+            activeQuestions.forEach((q, index) => {
+                if (q.question.toLowerCase().includes(lowerFilter)) {
+                    const card = document.createElement('div');
+                    card.className = 'answer-card';
+                    
+                    const qText = document.createElement('div');
+                    qText.className = 'question-text';
+                    qText.textContent = `${index + 1}. ${q.question}`;
+                    
+                    const aText = document.createElement('div');
+                    aText.className = 'correct-answer';
+                    aText.textContent = `Ответ: ${q.correct_answer}`;
+                    
+                    card.appendChild(qText);
+                    card.appendChild(aText);
+                    container.appendChild(card);
+                }
+            });
+        }
+
+        renderQuestions();
+
+        searchInput.addEventListener('input', (e) => {
+            renderQuestions(e.target.value);
+        });
+    </script>
+</body>
+</html>

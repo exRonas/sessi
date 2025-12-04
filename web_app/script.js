@@ -219,6 +219,12 @@ function submitTest() {
     const percentage = Math.round((score / preparedQuestions.length) * 100);
     scoreDisplay.textContent = `Вы ответили правильно на ${score} из ${preparedQuestions.length} вопросов (${percentage}%).`;
     
+    const viewAnswersLink = document.getElementById('view-answers-link');
+    if (viewAnswersLink) {
+        const currentSubject = urlParams.get('subject') || 'web';
+        viewAnswersLink.href = `answers.html?subject=${currentSubject}`;
+    }
+
     // Scroll to results? Or top?
     resultSummary.scrollIntoView({ behavior: 'smooth' });
 }

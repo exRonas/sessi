@@ -3,7 +3,7 @@ module.exports = {
     name   : "web-test",
     script : "./server.js",
     env: {
-      PORT: 3000,
+      PORT: 3005,
       NODE_ENV: "production",
     }
   }]

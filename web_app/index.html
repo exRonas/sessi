@@ -49,6 +49,14 @@
         </header>
 
         <h2 style="text-align: center; margin-top: 40px;">Веб-технологии</h2>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label style="font-size: 1.1em; cursor: pointer; user-select: none; display: inline-flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="shuffle-toggle" style="width: 18px; height: 18px;">
+                Перемешать порядок вопросов
+            </label>
+        </div>
+
         <div class="menu-grid">
             <a href="test.html?subject=web&start=0&end=30" class="menu-card">
                 <h3>Вопросы 1-30</h3>
@@ -98,5 +106,32 @@
             </a>
         </div>
     </div>
+    <script>
+        const shuffleToggle = document.getElementById('shuffle-toggle');
+        const links = document.querySelectorAll('.menu-card');
+
+        // Load saved state
+        const savedShuffle = localStorage.getItem('shuffleQuestions') === 'true';
+        shuffleToggle.checked = savedShuffle;
+        updateLinks(savedShuffle);
+
+        shuffleToggle.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            localStorage.setItem('shuffleQuestions', isChecked);
+            updateLinks(isChecked);
+        });
+
+        function updateLinks(shuffle) {
+            links.forEach(link => {
+                const url = new URL(link.href);
+                if (shuffle) {
+                    url.searchParams.set('shuffle', 'true');
+                } else {
+                    url.searchParams.delete('shuffle');
+                }
+                link.href = url.toString();
+            });
+        }
+    </script>
 </body>
 </html>

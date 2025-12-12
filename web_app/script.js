@@ -32,13 +32,18 @@ let activeQuestions = [];
 let questionOffset = 0;
 
 if (mode === 'all') {
-    activeQuestions = sourceQuestions;
+    activeQuestions = [...sourceQuestions];
 } else if (!isNaN(startParam) && !isNaN(endParam)) {
     activeQuestions = sourceQuestions.slice(startParam, endParam);
     questionOffset = startParam;
 } else {
     // Default fallback
-    activeQuestions = sourceQuestions;
+    activeQuestions = [...sourceQuestions];
+}
+
+// Shuffle questions if requested
+if (urlParams.get('shuffle') === 'true') {
+    shuffleArray(activeQuestions);
 }
 
 // We need to prepare the questions: shuffle options for each question
